@@ -5,63 +5,65 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.firestore();
+const provider = new firebase.auth.GoogleAuthProvider();
 
 // HTML 요소들 (페이지마다 있을 수도, 없을 수도 있음)
-const loginBtn = document.getElementById("login-btn");
-const userInfoSpan = document.getElementById("user-info");
+const loginBtn   = document.getElementById("login-btn");
+const logoutBtn  = document.getElementById("logout-btn");
+const userInfo   = document.getElementById("user-info");
 const titleInput = document.getElementById("title-input");
 const contentInput = document.getElementById("content-input");
-const postBtn = document.getElementById("post-btn");
-const postList = document.getElementById("post-list");
+const postBtn    = document.getElementById("post-btn");
+const postList   = document.getElementById("post-list");
 
 
-// 2. (선택) 로그인 버튼이 있을 때만 이벤트 걸기
+// 2. 구글 로그인 버튼
 if (loginBtn) {
   loginBtn.addEventListener("click", () => {
     auth
-      .signInAnonymously()
-      .then(() => {
-        console.log("익명 로그인 완료");
+      .signInWithPopup(provider)
+      .then((result) => {
+        console.log("Google 로그인 성공", result.user);
       })
       .catch((err) => {
-        console.error("로그인 에러:", err);
+        console.error("Google 로그인 에러:", err);
         alert("로그인 중 오류가 발생했습니다.");
       });
   });
 }
 
+// 3. 로그아웃 버튼
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    auth.signOut();
+  });
+}
 
-// 3. 로그인 상태 변화 감지 + 자동 익명 로그인
+// 4. 로그인 상태 변화 감지
 auth.onAuthStateChanged((user) => {
   if (user) {
-    const uidShort = user.uid.slice(0, 6);
-    if (userInfoSpan) {
-      userInfoSpan.textContent = `로그인됨: 익명#${uidShort}`;
+    const name = user.displayName || "이름 없음";
+    const email = user.email || "";
+    if (userInfo) {
+      userInfo.textContent = `${name} (${email})`;
     }
-    if (loginBtn) {
-      loginBtn.style.display = "none";
-    }
+    if (loginBtn)  loginBtn.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "inline-block";
   } else {
-    // 아직 로그인 안 돼 있으면 자동으로 익명 로그인 시도
-    if (userInfoSpan) {
-      userInfoSpan.textContent = "로그인 중...";
-    }
-    auth
-      .signInAnonymously()
-      .catch((err) => {
-        console.error("자동 익명 로그인 에러:", err);
-      });
+    if (userInfo)  userInfo.textContent = "로그인되지 않음";
+    if (loginBtn)  loginBtn.style.display = "inline-block";
+    if (logoutBtn) logoutBtn.style.display = "none";
   }
 });
 
 
-// 4. 글 작성 버튼(등록)이 있을 때만 이벤트 추가
+// 5. 글 작성 (로그인한 사람만 가능)
 if (postBtn) {
   postBtn.addEventListener("click", async () => {
     const user = auth.currentUser;
 
     if (!user) {
-      alert("로그인 상태를 확인 중입니다. 잠시 후 다시 시도해 주세요.");
+      alert("글을 쓰려면 먼저 Google 로그인을 해 주세요.");
       return;
     }
 
@@ -78,24 +80,25 @@ if (postBtn) {
         title,
         content,
         uid: user.uid,
+        authorName: user.displayName || "익명",
+        authorEmail: user.email || "",
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      // 작성 후 입력창 비우기
       titleInput.value = "";
       contentInput.value = "";
 
-      // 글 쓴 뒤 목록 페이지로 이동
+      // 글 작성 후 목록으로 이동
       window.location.href = "index.html";
     } catch (e) {
       console.error(e);
-      alert("글 작성 중 오류 발생");
+      alert("글 작성 중 오류가 발생했습니다.");
     }
   });
 }
 
 
-// 5. 글 목록은 post-list가 있는 페이지(index.html)에서만 구독
+// 6. 글 목록 (index.html 에서만 실행)
 if (postList) {
   db.collection("posts")
     .orderBy("createdAt", "desc")
@@ -110,11 +113,12 @@ if (postList) {
         const created = data.createdAt
           ? data.createdAt.toDate().toLocaleString()
           : "방금";
-        const uidShort = data.uid ? data.uid.slice(0, 6) : "익명";
+
+        const author = data.authorName || "익명";
 
         div.innerHTML = `
           <div class="post-title">${data.title}</div>
-          <div class="post-meta">작성자: 익명#${uidShort} · ${created}</div>
+          <div class="post-meta">작성자: ${author} · ${created}</div>
           <div class="post-content">${data.content}</div>
         `;
 
