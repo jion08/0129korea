@@ -15,13 +15,16 @@
   </header>
 
   <main class="write-page">
-    <h2>글 쓰기</h2>
+  <h2>글 쓰기</h2>
 
-    <input id="title-input" type="text" placeholder="제목" />
-    <textarea id="content-input" placeholder="내용을 입력하세요"></textarea>
+  <label class="write-label">제목</label>
+  <input id="title-input" type="text" placeholder="제목을 입력하세요" class="write-input" />
 
-    <button id="post-btn" class="post-btn">등록</button>
-  </main>
+  <label class="write-label">내용</label>
+  <textarea id="content-input" placeholder="내용을 입력하세요" class="write-textarea"></textarea>
+
+  <button id="post-btn" class="post-btn">등록</button>
+</main>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
