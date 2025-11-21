@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>0129 커뮤니티</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">0129 COMMUNITY</div>
+    <nav>
+      <button id="login-btn">익명 로그인</button>
+      <span id="user-info"></span>
+    </nav>
+  </header>
 
+  <main>
+    <section class="write-section">
+      <h2>글 쓰기</h2>
+      <input id="title-input" type="text" placeholder="제목" />
+      <textarea id="content-input" placeholder="내용을 입력하세요"></textarea>
+      <button id="post-btn">작성</button>
+    </section>
+
+    <section class="list-section">
+      <h2>최근 글</h2>
+      <div id="post-list"></div>
+    </section>
+  </main>
+
+  <!-- Firebase SDK (compat 버전) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+
+  <!-- 네가 만든 설정 / 앱 코드 -->
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
