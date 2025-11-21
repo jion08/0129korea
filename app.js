@@ -15,6 +15,7 @@ const titleInput = document.getElementById("title-input");
 const contentInput = document.getElementById("content-input");
 const postBtn    = document.getElementById("post-btn");
 const postList   = document.getElementById("post-list");
+const anonymousCheck = document.getElementById("anonymous-check");
 
 
 // 2. 구글 로그인 버튼
@@ -76,14 +77,26 @@ if (postBtn) {
     }
 
     try {
-      await db.collection("posts").add({
-        title,
-        content,
-        uid: user.uid,
-        authorName: user.displayName || "익명",
-        authorEmail: user.email || "",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+const useAnonymous = anonymousCheck && anonymousCheck.checked;
+
+const authorName = useAnonymous
+  ? "익명"
+  : (user.displayName || "익명");
+
+const authorEmail = useAnonymous
+  ? ""
+  : (user.email || "");
+
+await db.collection("posts").add({
+  title,
+  content,
+  uid: user.uid,
+  authorName,
+  authorEmail,
+  isAnonymous: useAnonymous,
+  createdAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+
 
       titleInput.value = "";
       contentInput.value = "";
