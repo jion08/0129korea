@@ -2,40 +2,45 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>글쓰기 | 0129 커뮤니티</title>
+  <title>글 쓰기 | 0129 커뮤니티</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <header>
-  <div class="logo">0129 COMMUNITY</div>
-  <nav>
-    <button onclick="location.href='index.html'" class="back-btn">← 목록</button>
-    <span id="user-info"></span>
-    <button id="login-btn" class="login-btn">Google 로그인</button>
-    <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
-  </nav>
-</header>
-
+    <div class="logo">0129 COMMUNITY</div>
+    <nav>
+      <button onclick="location.href='index.html'" class="back-btn">← 목록</button>
+      <span id="user-info"></span>
+      <button id="login-btn" class="login-btn">Google 로그인</button>
+      <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
+    </nav>
+  </header>
 
   <main class="write-page">
-  <h2>글 쓰기</h2>
+    <h2>글 쓰기</h2>
 
-  <label class="write-label">제목</label>
-  <input id="title-input" type="text" placeholder="제목을 입력하세요" class="write-input" />
+    <label class="write-label">제목</label>
+    <input id="title-input" type="text" class="write-input" placeholder="제목을 입력하세요" />
 
-  <label class="write-label">내용</label>
-  <textarea id="content-input" placeholder="내용을 입력하세요" class="write-textarea"></textarea>
+    <label class="write-label">내용</label>
+    <textarea id="content-input" class="write-textarea" placeholder="내용을 입력하세요"></textarea>
 
+    <!-- 일반 유저 / 관리자 공통: 익명 -->
     <label class="anon-check">
-  <input type="checkbox" id="anonymous-check" />
-  익명으로 등록하기
-</label>
+      <input type="checkbox" id="anonymous-check" />
+      익명으로 등록하기
+    </label>
 
-  <button id="post-btn" class="post-btn">등록</button>
-</main>
+    <!-- 관리자만 보이는 체크박스 -->
+    <label class="admin-check" id="admin-check-wrapper" style="display:none;">
+      <input type="checkbox" id="admin-check" />
+      관리자 이름으로 남기기
+    </label>
 
-  <!-- Firebase SDK -->
+    <button id="post-btn" class="post-btn">등록</button>
+  </main>
+
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
