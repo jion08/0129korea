@@ -71,6 +71,47 @@
         이메일로 로그인
       </button>
     </div>
+
+      <!-- 이메일 가입 모달 -->
+  <div id="signup-modal" class="signup-modal">
+    <div class="signup-card">
+      <h3>이메일로 가입하기</h3>
+
+      <label class="login-label">이름</label>
+      <input
+        type="text"
+        id="signup-name-input"
+        class="login-input"
+        placeholder="표시될 이름"
+      />
+
+      <label class="login-label">이메일</label>
+      <input
+        type="email"
+        id="signup-email-input"
+        class="login-input"
+        placeholder="example@gmail.com"
+      />
+
+      <label class="login-label">비밀번호</label>
+      <input
+        type="password"
+        id="signup-password-input"
+        class="login-input"
+        placeholder="비밀번호"
+      />
+
+      <div class="signup-buttons">
+        <button id="signup-submit-btn" class="login-email-btn">
+          가입하기
+        </button>
+        <button id="signup-cancel-btn" class="login-back-btn">
+          취소
+        </button>
+      </div>
+    </div>
+  </div>
+
   </main>
 
   <!-- Firebase SDKs (나중에 동작 붙일 때 사용) -->
