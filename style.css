@@ -18,9 +18,15 @@ header {
 }
 
 .logo {
-  font-weight: 800;
-  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
 }
+
+.logo img {
+  height: 32px;        /* 로고 높이 조절 */
+  display: block;
+}
+
 
 nav {
   display: flex;
