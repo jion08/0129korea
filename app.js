@@ -406,7 +406,6 @@ if (emailLoginBtn && emailInput && passwordInput) {
         return;
       }
 
-      alert("로그인 성공!");
       window.location.href = "index.html";
     } catch (err) {
       console.error("이메일 로그인 에러:", err);
