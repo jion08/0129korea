@@ -16,6 +16,8 @@ const contentInput   = document.getElementById("content-input");
 const postBtn        = document.getElementById("post-btn");
 const postList       = document.getElementById("post-list");
 const anonymousCheck = document.getElementById("anonymous-check");
+const adminCheck     = document.getElementById("admin-check");
+const adminCheckWrapper = document.getElementById("admin-check-wrapper");
 
 // 현재 로그인 유저 & 관리자 정보 ------------------------------------
 let currentUser = null;
@@ -67,6 +69,16 @@ function updateUserInfoUI() {
     if (loginBtn)  loginBtn.style.display = "inline-block";
     if (logoutBtn) logoutBtn.style.display = "none";
   }
+
+  // 관리자일 때만 "관리자 이름으로 남기기" 체크박스를 보이게
+  if (adminCheckWrapper) {
+    if (isAdmin) {
+      adminCheckWrapper.style.display = "flex";
+    } else {
+      adminCheckWrapper.style.display = "none";
+      if (adminCheck) adminCheck.checked = false;
+    }
+  }
 }
 
 
@@ -106,7 +118,23 @@ auth.onAuthStateChanged((user) => {
 });
 
 
-// 6. 글 작성 (로그인한 사람만, 익명 옵션 지원) -----------------------
+// 5-1. 익명 / 관리자 체크가 동시에 켜지지 않게 -----------------------
+if (anonymousCheck && adminCheck) {
+  anonymousCheck.addEventListener("change", () => {
+    if (anonymousCheck.checked && adminCheck.checked) {
+      adminCheck.checked = false;
+    }
+  });
+
+  adminCheck.addEventListener("change", () => {
+    if (adminCheck.checked && anonymousCheck.checked) {
+      anonymousCheck.checked = false;
+    }
+  });
+}
+
+
+// 6. 글 작성 (로그인한 사람만, 3모드 지원) ---------------------------
 if (postBtn) {
   postBtn.addEventListener("click", async () => {
     const user = auth.currentUser;
@@ -125,14 +153,24 @@ if (postBtn) {
     }
 
     const useAnonymous = anonymousCheck && anonymousCheck.checked;
+    const useAdminName = adminCheck && adminCheck.checked && isAdmin;
 
-    const authorName = useAnonymous
-      ? "익명"
-      : (user.displayName || "익명");
+    let authorName;
+    let authorEmail;
 
-    const authorEmail = useAnonymous
-      ? ""
-      : (user.email || "");
+    if (useAnonymous) {
+      // 1) 익명 모드
+      authorName  = "익명";
+      authorEmail = "";
+    } else if (useAdminName) {
+      // 2) 관리자 이름 모드
+      authorName  = "관리자";   // 화면에서 rainbow-admin으로 꾸밀 예정
+      authorEmail = "";         // 굳이 메일 안 남기고 싶으면 빈 문자열
+    } else {
+      // 3) 일반 모드 (로그인한 내 이름)
+      authorName  = user.displayName || "익명";
+      authorEmail = user.email || "";
+    }
 
     try {
       await db.collection("posts").add({
@@ -158,8 +196,7 @@ if (postBtn) {
 }
 
 
-
-// 7. 글 목록 불러오기 + 점점점 메뉴(삭제/신고)---------------------------------------------------
+// 7. 글 목록 불러오기 + 점점점 메뉴(삭제/신고) -----------------------
 if (postList) {
   db.collection("posts")
     .orderBy("createdAt", "desc")
@@ -176,19 +213,22 @@ if (postList) {
           ? data.createdAt.toDate().toLocaleString()
           : "방금";
 
-        const author = data.authorName || "익명";
+        // 작성자 표시 (관리자면 무지개)
+        let authorDisplay = data.authorName || "익명";
+        if (data.authorName === "관리자") {
+          authorDisplay = `<span class="rainbow-admin">관리자</span>`;
+        }
 
-        // 삭제 가능 조건: 관리자이거나, 글 작성자 본인
+        // 삭제 가능 조건: 관리자 or 글 작성자 본인
         const canDelete =
           isAdmin || (currentUser && currentUser.uid === data.uid);
 
-        // 여기서 점점점 버튼 + 메뉴 HTML 구성
         div.innerHTML = `
           <div class="post-title">
             <span>${data.title}</span>
             <button class="more-btn" data-id="${doc.id}">⋯</button>
           </div>
-          <div class="post-meta">작성자: ${author} · ${created}</div>
+          <div class="post-meta">작성자: ${authorDisplay} · ${created}</div>
           <div class="post-content">${data.content}</div>
 
           <div class="post-menu" data-id="${doc.id}">
@@ -200,8 +240,6 @@ if (postList) {
         postList.appendChild(div);
       });
 
-      // ---------- 이벤트 연결 구역 ----------
-
       // 점점점 버튼: 메뉴 열고 닫기
       const moreButtons = postList.querySelectorAll(".more-btn");
       moreButtons.forEach((btn) => {
@@ -210,7 +248,6 @@ if (postList) {
           const menu = postList.querySelector(`.post-menu[data-id="${id}"]`);
           if (!menu) return;
 
-          // 다른 메뉴들은 닫고, 이 메뉴만 토글
           const allMenus = postList.querySelectorAll(".post-menu");
           allMenus.forEach((m) => {
             if (m !== menu) m.classList.remove("open");
@@ -219,7 +256,7 @@ if (postList) {
         });
       });
 
-      // 삭제 버튼 (관리자 + 글쓴이만 메뉴에 있음)
+      // 삭제 버튼 (관리자 + 글쓴이만)
       const deleteButtons = postList.querySelectorAll(".menu-delete");
       deleteButtons.forEach((btn) => {
         btn.addEventListener("click", async (e) => {
@@ -237,21 +274,19 @@ if (postList) {
         });
       });
 
-      // 신고 버튼 (모두에게 보이게, 지금은 알림만)
+      // 신고 버튼 (일단 알림만)
       const reportButtons = postList.querySelectorAll(".menu-report");
       reportButtons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
           const id = e.currentTarget.getAttribute("data-id");
-          // 나중에 Firestore에 신고 기록 남기고 싶으면 여기서 처리하면 됨
-          alert("신고가 접수되었습니다. (테스트용 알림)\n문서 ID: " + id);
+          alert("신고가 접수되었습니다. (테스트용)\n문서 ID: " + id);
 
-          // 메뉴 닫기
           const menu = postList.querySelector(`.post-menu[data-id="${id}"]`);
           if (menu) menu.classList.remove("open");
         });
       });
 
-      // 바깥 아무 데나 클릭하면 모든 메뉴 닫기
+      // 리스트 영역 밖 클릭 시 모든 메뉴 닫기
       document.addEventListener("click", (e) => {
         if (!postList.contains(e.target)) {
           const allMenus = postList.querySelectorAll(".post-menu");
