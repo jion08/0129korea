@@ -335,21 +335,44 @@ if (postList) {
 
 // 8. 이메일 로그인 / 가입 (login.html 전용) --------------------------
 
-// 이메일로 가입하기 (비밀번호/이메일 칸에 입력한 값으로)
-if (emailSignupLink && emailInput && passwordInput) {
-  emailSignupLink.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const pw    = passwordInput.value.trim();
+// 이메일로 가입하기 (모달 안의 이름/이메일/비번)
+if (
+  signupSubmitBtn &&
+  signupNameInput &&
+  signupEmailInput &&
+  signupPasswordInput &&
+  signupModal
+) {
+  signupSubmitBtn.addEventListener("click", async () => {
+    const name = signupNameInput.value.trim();
+    const email = signupEmailInput.value.trim();
+    const pw = signupPasswordInput.value.trim();
 
-    if (!email || !pw) {
-      alert("이메일과 비밀번호를 입력해 주세요.");
+    if (!name || !email || !pw) {
+      alert("이름, 이메일, 비밀번호를 모두 입력해 주세요.");
       return;
     }
 
     try {
-      await auth.createUserWithEmailAndPassword(email, pw);
-      alert("가입이 완료되었습니다. 자동으로 로그인됩니다.");
-      window.location.href = "index.html";
+      const cred = await auth.createUserWithEmailAndPassword(email, pw);
+
+      // 표시 이름 저장
+      await cred.user.updateProfile({
+        displayName: name,
+      });
+
+      // 이메일 인증 메일 보내기
+      await cred.user.sendEmailVerification();
+
+      alert(
+        "가입이 완료되었습니다.\n이메일로 전송된 인증 메일을 확인한 뒤 다시 로그인해 주세요."
+      );
+
+      // 아직 이메일 인증 전이므로, 강제 로그아웃
+      await auth.signOut();
+
+      // 모달 닫기
+      signupModal.style.display = "none";
     } catch (err) {
       console.error("이메일 가입 에러:", err);
       alert(err.message || "가입 중 오류가 발생했습니다.");
@@ -357,11 +380,12 @@ if (emailSignupLink && emailInput && passwordInput) {
   });
 }
 
+
 // 이메일로 로그인
 if (emailLoginBtn && emailInput && passwordInput) {
   emailLoginBtn.addEventListener("click", async () => {
     const email = emailInput.value.trim();
-    const pw    = passwordInput.value.trim();
+    const pw = passwordInput.value.trim();
 
     if (!email || !pw) {
       alert("이메일과 비밀번호를 입력해 주세요.");
@@ -369,7 +393,19 @@ if (emailLoginBtn && emailInput && passwordInput) {
     }
 
     try {
-      await auth.signInWithEmailAndPassword(email, pw);
+      const cred = await auth.signInWithEmailAndPassword(email, pw);
+      const user = cred.user;
+
+      if (!user.emailVerified) {
+        // 이메일 인증 안 됐으면 로그인 막기 + 인증 메일 다시 보내기
+        await user.sendEmailVerification();
+        alert(
+          "이메일이 아직 인증되지 않았습니다.\n메일함에서 인증 메일을 확인해 주세요. (인증 메일을 다시 보냈습니다.)"
+        );
+        await auth.signOut();
+        return;
+      }
+
       alert("로그인 성공!");
       window.location.href = "index.html";
     } catch (err) {
@@ -378,3 +414,21 @@ if (emailLoginBtn && emailInput && passwordInput) {
     }
   });
 }
+
+// ===== 이메일 가입 모달 열기/닫기 =====
+if (emailSignupLink && signupModal) {
+  emailSignupLink.addEventListener("click", () => {
+    // 입력값 초기화
+    if (signupNameInput) signupNameInput.value = "";
+    if (signupEmailInput) signupEmailInput.value = "";
+    if (signupPasswordInput) signupPasswordInput.value = "";
+    signupModal.style.display = "flex";
+  });
+}
+
+if (signupCancelBtn && signupModal) {
+  signupCancelBtn.addEventListener("click", () => {
+    signupModal.style.display = "none";
+  });
+}
+
