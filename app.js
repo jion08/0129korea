@@ -158,7 +158,8 @@ if (postBtn) {
 }
 
 
-// 7. 글 목록 불러오기 + 관리자/작성자 삭제 버튼 -----------------------
+
+// 7. 글 목록 불러오기 + 점점점 메뉴(삭제/신고)---------------------------------------------------
 if (postList) {
   db.collection("posts")
     .orderBy("createdAt", "desc")
@@ -177,29 +178,52 @@ if (postList) {
 
         const author = data.authorName || "익명";
 
-        // 삭제 가능 조건:
-        // 1) 관리자이거나
-        // 2) 현재 로그인 유저가 글 작성자(uid 같음)
+        // 삭제 가능 조건: 관리자이거나, 글 작성자 본인
         const canDelete =
           isAdmin || (currentUser && currentUser.uid === data.uid);
 
+        // 여기서 점점점 버튼 + 메뉴 HTML 구성
         div.innerHTML = `
           <div class="post-title">
-            ${data.title}
-            ${canDelete ? `<button class="delete-btn" data-id="${doc.id}">삭제</button>` : ""}
+            <span>${data.title}</span>
+            <button class="more-btn" data-id="${doc.id}">⋯</button>
           </div>
           <div class="post-meta">작성자: ${author} · ${created}</div>
           <div class="post-content">${data.content}</div>
+
+          <div class="post-menu" data-id="${doc.id}">
+            ${canDelete ? `<button class="menu-delete" data-id="${doc.id}">삭제</button>` : ""}
+            <button class="menu-report" data-id="${doc.id}">신고</button>
+          </div>
         `;
 
         postList.appendChild(div);
       });
 
-      // 삭제 버튼 클릭 이벤트 연결
-      const deleteButtons = postList.querySelectorAll(".delete-btn");
+      // ---------- 이벤트 연결 구역 ----------
+
+      // 점점점 버튼: 메뉴 열고 닫기
+      const moreButtons = postList.querySelectorAll(".more-btn");
+      moreButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.getAttribute("data-id");
+          const menu = postList.querySelector(`.post-menu[data-id="${id}"]`);
+          if (!menu) return;
+
+          // 다른 메뉴들은 닫고, 이 메뉴만 토글
+          const allMenus = postList.querySelectorAll(".post-menu");
+          allMenus.forEach((m) => {
+            if (m !== menu) m.classList.remove("open");
+          });
+          menu.classList.toggle("open");
+        });
+      });
+
+      // 삭제 버튼 (관리자 + 글쓴이만 메뉴에 있음)
+      const deleteButtons = postList.querySelectorAll(".menu-delete");
       deleteButtons.forEach((btn) => {
         btn.addEventListener("click", async (e) => {
-          const id = e.target.getAttribute("data-id");
+          const id = e.currentTarget.getAttribute("data-id");
           if (!id) return;
 
           if (!confirm("이 게시물을 정말 삭제할까요?")) return;
@@ -211,6 +235,28 @@ if (postList) {
             alert("삭제 중 오류가 발생했습니다.");
           }
         });
+      });
+
+      // 신고 버튼 (모두에게 보이게, 지금은 알림만)
+      const reportButtons = postList.querySelectorAll(".menu-report");
+      reportButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.getAttribute("data-id");
+          // 나중에 Firestore에 신고 기록 남기고 싶으면 여기서 처리하면 됨
+          alert("신고가 접수되었습니다. (테스트용 알림)\n문서 ID: " + id);
+
+          // 메뉴 닫기
+          const menu = postList.querySelector(`.post-menu[data-id="${id}"]`);
+          if (menu) menu.classList.remove("open");
+        });
+      });
+
+      // 바깥 아무 데나 클릭하면 모든 메뉴 닫기
+      document.addEventListener("click", (e) => {
+        if (!postList.contains(e.target)) {
+          const allMenus = postList.querySelectorAll(".post-menu");
+          allMenus.forEach((m) => m.classList.remove("open"));
+        }
       });
     });
 }
