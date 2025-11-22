@@ -1,4 +1,3 @@
-
 * {
   box-sizing: border-box;
 }
@@ -23,11 +22,10 @@ header {
   letter-spacing: 1px;
 }
 
-nav button {
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
+nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 main {
@@ -36,39 +34,83 @@ main {
   padding: 0 10px;
 }
 
-.write-section,
+/* 상단 유저 정보 & 버튼들 */
+#user-info {
+  font-size: 13px;
+}
+
+/* 로그인 / 로그아웃 / 뒤로 버튼 */
+.login-btn,
+.logout-btn,
+.back-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.login-btn,
+.back-btn {
+  background: #fff;
+}
+
+.logout-btn {
+  background: #ff4d4d;
+  color: #fff;
+}
+
+/* 메인 - 글쓰기 버튼 */
+.write-btn {
+  margin: 10px 0 20px;
+  padding: 8px 16px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.write-btn:hover {
+  opacity: 0.85;
+}
+
+/* 글 목록 카드 */
 .list-section {
   background: #fff;
   padding: 15px;
   border-radius: 10px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.write-section input,
-.write-section textarea {
-  width: 100%;
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
 }
 
-.write-section textarea {
-  min-height: 100px;
-  resize: vertical;
+.list-header h2 {
+  margin: 0;
 }
 
-#post-list .post {
+/* 각 게시물 카드 */
+.post {
   border-bottom: 1px solid #eee;
   padding: 10px 0;
+  position: relative; /* 점점점 메뉴 위치용 */
 }
 
-#post-list .post:last-child {
+.post:last-child {
   border-bottom: none;
 }
 
+/* 게시물 제목 줄: 제목 + 점점점 버튼 */
 .post-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 700;
   margin-bottom: 4px;
 }
@@ -80,163 +122,8 @@ main {
 }
 
 .post-content {
+  font-size: 14px;
   white-space: pre-wrap;
-  font-size: 14px;
-}
-
-.write-btn {
-  margin: 10px 0 20px;
-  padding: 8px 16px;
-  background: #111;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.write-btn:hover {
-  opacity: 0.8;
-}
-
-.write-page {
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 0 10px;
-}
-
-.back-btn {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: none;
-  background: white;
-  cursor: pointer;
-}
-
-.post-btn {
-  width: 100%;
-  padding: 10px;
-  background: #111;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 15px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-/* 글쓰기 페이지 전체 영역 */
-.write-page {
-  max-width: 700px;
-  margin: 40px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-/* 글쓰기 제목 */
-.write-page h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 700;
-}
-
-/* 제목/내용 라벨 */
-.write-label {
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
-}
-
-/* 제목 입력창 */
-.write-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-size: 15px;
-}
-
-/* 내용 입력창 */
-.write-textarea {
-  width: 100%;
-  height: 250px;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-size: 15px;
-  resize: vertical;
-}
-
-/* 등록 버튼 */
-.post-btn {
-  width: 100%;
-  padding: 12px;
-  background: #111;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.post-btn:hover {
-  opacity: 0.9;
-}
-
-
-.login-btn,
-.logout-btn,
-.back-btn {
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  font-size: 13px;
-  margin-left: 6px;
-}
-
-.login-btn {
-  background: #fff;
-}
-
-.logout-btn {
-  background: #ff4d4d;
-  color: #fff;
-}
-
-.back-btn {
-  background: #fff;
-}
-
-nav #user-info {
-  font-size: 13px;
-  margin-right: 4px;
-}
-
-.anon-check {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.anon-check input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-}
-
-/* 게시물 상단 영역: 제목 + 점점점 버튼 정렬 */
-.post-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 /* 점점점 버튼 */
@@ -249,20 +136,16 @@ nav #user-info {
   padding: 0 4px;
 }
 
-/* 점점점 버튼 눌렀을 때 나오는 메뉴 */
-.post {
-  position: relative;
-}
-
+/* 점점점 눌렀을 때 뜨는 메뉴 */
 .post-menu {
   position: absolute;
-  top: 8px;
+  top: 32px;
   right: 8px;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  display: none;
+  display: none;            /* 기본 숨김 */
   min-width: 90px;
   z-index: 10;
 }
@@ -290,3 +173,102 @@ nav #user-info {
   color: #e53935;
 }
 
+/* 글쓰기 페이지 */
+.write-page {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.write-page h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.write-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.write-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.write-textarea {
+  width: 100%;
+  height: 250px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  resize: vertical;
+}
+
+/* 익명 / 관리자 체크 박스 */
+.anon-check,
+.admin-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.anon-check input[type="checkbox"],
+.admin-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+/* 등록 버튼 */
+.post-btn {
+  width: 100%;
+  padding: 12px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.post-btn:hover {
+  opacity: 0.9;
+}
+
+/* 🌈 관리자 닉네임 무지개 애니메이션 */
+.rainbow-admin {
+  font-weight: 700;
+  background: linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    violet
+  );
+  background-size: 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbowMove 4s linear infinite;
+}
+
+@keyframes rainbowMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
