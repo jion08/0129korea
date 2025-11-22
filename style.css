@@ -487,6 +487,7 @@ main {
   color: #333;
 }
 
+/* 기존 footer 스타일 유지 */
 .footer {
   margin-top: 40px;
   padding: 20px 0;
@@ -502,6 +503,22 @@ main {
 }
 
 .footer a:hover {
+  text-decoration: underline;
+}
+
+/* 신고/문의 추가 스타일 */
+.footer-contact {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.footer-contact a {
+  color: #333;
+  text-decoration: none;
+}
+
+.footer-contact a:hover {
   text-decoration: underline;
 }
 
