@@ -438,3 +438,62 @@ if (signupCancelBtn && signupModal) {
   });
 }
 
+// =======================
+// 방문자 수 카운트 시스템
+// =======================
+const visitorBox = document.getElementById("visitor-box");
+
+async function updateVisitorCount() {
+  try {
+    const statsRef = db.collection("visitors").doc("stats");
+    const statsDoc = await statsRef.get();
+
+    const todayString = new Date().toISOString().slice(0, 10); // "2025-11-22"
+
+    if (!statsDoc.exists) {
+      // 문서가 없으면 처음 생성
+      await statsRef.set({
+        total: 1,
+        today: 1,
+        todayDate: todayString
+      });
+
+      visitorBox.textContent = `오늘 방문: 1명\n전체 방문: 1명`;
+      return;
+    }
+
+    const data = statsDoc.data();
+    let { total, today, todayDate } = data;
+
+    // 날짜가 바뀌었으면 오늘 방문자 초기화
+    if (todayDate !== todayString) {
+      today = 0;
+      todayDate = todayString;
+    }
+
+    // 방문자 증가
+    total += 1;
+    today += 1;
+
+    // Firestore 업데이트
+    await statsRef.update({
+      total,
+      today,
+      todayDate
+    });
+
+    visitorBox.innerHTML =
+      `오늘 방문: ${today}명<br>` +
+      `전체 방문: ${total}명`;
+
+  } catch (err) {
+    console.error("방문자 수 로드 에러:", err);
+    if (visitorBox) visitorBox.textContent = "방문자 정보를 불러올 수 없음";
+  }
+}
+
+// index.html 접속하면 즉시 방문자 증가
+if (visitorBox) {
+  updateVisitorCount();
+}
+
