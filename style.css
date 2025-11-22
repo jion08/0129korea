@@ -447,3 +447,42 @@ main {
 .login-email-btn:hover {
   opacity: 0.9;
 }
+/* ===== 이메일 가입 모달 ===== */
+
+.signup-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: none;              /* 기본은 숨김 */
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.signup-card {
+  background: #fff;
+  padding: 24px 20px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 380px;
+}
+
+.signup-card h3 {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.signup-buttons {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 모달 안에서 쓰는 취소 버튼 */
+.signup-buttons .login-back-btn {
+  background: #eee;
+  color: #333;
+}
