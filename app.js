@@ -8,16 +8,23 @@ const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 // HTML 요소들 --------------------------------------------------------
-const loginBtn       = document.getElementById("login-btn");
-const logoutBtn      = document.getElementById("logout-btn");
-const userInfo       = document.getElementById("user-info");
-const titleInput     = document.getElementById("title-input");
-const contentInput   = document.getElementById("content-input");
-const postBtn        = document.getElementById("post-btn");
-const postList       = document.getElementById("post-list");
-const anonymousCheck = document.getElementById("anonymous-check");
-const adminCheck     = document.getElementById("admin-check");
+const loginBtn          = document.getElementById("login-btn");          // 헤더용 Google 로그인 버튼 (index/write)
+const logoutBtn         = document.getElementById("logout-btn");
+const userInfo          = document.getElementById("user-info");
+const titleInput        = document.getElementById("title-input");
+const contentInput      = document.getElementElementById("content-input");
+const postBtn           = document.getElementById("post-btn");
+const postList          = document.getElementById("post-list");
+const anonymousCheck    = document.getElementById("anonymous-check");
+const adminCheck        = document.getElementById("admin-check");
 const adminCheckWrapper = document.getElementById("admin-check-wrapper");
+
+// 로그인 페이지 전용 요소들 ------------------------------------------
+const googleLoginBtn   = document.getElementById("google-login-btn");   // login.html Google 버튼
+const emailInput       = document.getElementById("email-input");
+const passwordInput    = document.getElementById("password-input");
+const emailLoginBtn    = document.getElementById("email-login-btn");
+const emailSignupLink  = document.getElementById("email-signup-link");
 
 // 현재 로그인 유저 & 관리자 정보 ------------------------------------
 let currentUser = null;
@@ -82,7 +89,9 @@ function updateUserInfoUI() {
 }
 
 
-// 4. 구글 로그인 / 로그아웃 버튼 ------------------------------------
+// 4. Google 로그인 / 로그아웃 버튼 ----------------------------------
+
+// 헤더에 있는 기본 loginBtn (index, write 등)
 if (loginBtn) {
   loginBtn.addEventListener("click", () => {
     auth
@@ -97,6 +106,24 @@ if (loginBtn) {
   });
 }
 
+// login.html 의 큰 Google 로그인 버튼
+if (googleLoginBtn) {
+  googleLoginBtn.addEventListener("click", () => {
+    auth
+      .signInWithPopup(provider)
+      .then((result) => {
+        console.log("Google 로그인 성공 (login.html)", result.user);
+        // 로그인 성공하면 메인으로 이동
+        window.location.href = "index.html";
+      })
+      .catch((err) => {
+        console.error("Google 로그인 에러:", err);
+        alert("로그인 중 오류가 발생했습니다.");
+      });
+  });
+}
+
+// 로그아웃
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     auth.signOut();
@@ -140,7 +167,7 @@ if (postBtn) {
     const user = auth.currentUser;
 
     if (!user) {
-      alert("글을 쓰려면 먼저 Google 로그인을 해 주세요.");
+      alert("글을 쓰려면 먼저 로그인해 주세요.");
       return;
     }
 
@@ -164,8 +191,8 @@ if (postBtn) {
       authorEmail = "";
     } else if (useAdminName) {
       // 2) 관리자 이름 모드
-      authorName  = "관리자";   // 화면에서 rainbow-admin으로 꾸밀 예정
-      authorEmail = "";         // 굳이 메일 안 남기고 싶으면 빈 문자열
+      authorName  = "관리자";   // 화면에서 rainbow-admin으로 꾸밈
+      authorEmail = "";
     } else {
       // 3) 일반 모드 (로그인한 내 이름)
       authorName  = user.displayName || "익명";
@@ -274,12 +301,12 @@ if (postList) {
         });
       });
 
-      // 신고 버튼 (일단 알림만)
+      // 신고 버튼 (임시: 알림만)
       const reportButtons = postList.querySelectorAll(".menu-report");
       reportButtons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
           const id = e.currentTarget.getAttribute("data-id");
-          alert("신고가 접수되었습니다. (테스트용)\n문서 ID: " + id);
+          alert("신고가 접수되었습니다. (임시 기능)\n문서 ID: " + id);
 
           const menu = postList.querySelector(`.post-menu[data-id="${id}"]`);
           if (menu) menu.classList.remove("open");
@@ -294,4 +321,51 @@ if (postList) {
         }
       });
     });
+}
+
+
+// 8. 이메일 로그인 / 가입 (login.html 전용) --------------------------
+
+// 이메일로 가입하기 (비밀번호/이메일 칸에 입력한 값으로)
+if (emailSignupLink && emailInput && passwordInput) {
+  emailSignupLink.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const pw    = passwordInput.value.trim();
+
+    if (!email || !pw) {
+      alert("이메일과 비밀번호를 입력해 주세요.");
+      return;
+    }
+
+    try {
+      await auth.createUserWithEmailAndPassword(email, pw);
+      alert("가입이 완료되었습니다. 자동으로 로그인됩니다.");
+      window.location.href = "index.html";
+    } catch (err) {
+      console.error("이메일 가입 에러:", err);
+      alert(err.message || "가입 중 오류가 발생했습니다.");
+    }
+  });
+}
+
+// 이메일로 로그인
+if (emailLoginBtn && emailInput && passwordInput) {
+  emailLoginBtn.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const pw    = passwordInput.value.trim();
+
+    if (!email || !pw) {
+      alert("이메일과 비밀번호를 입력해 주세요.");
+      return;
+    }
+
+    try {
+      await auth.signInWithEmailAndPassword(email, pw);
+      alert("로그인 성공!");
+      window.location.href = "index.html";
+    } catch (err) {
+      console.error("이메일 로그인 에러:", err);
+      alert(err.message || "로그인 중 오류가 발생했습니다.");
+    }
+  });
 }
