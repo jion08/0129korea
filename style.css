@@ -231,3 +231,62 @@ nav #user-info {
   width: 16px;
   height: 16px;
 }
+
+/* 게시물 상단 영역: 제목 + 점점점 버튼 정렬 */
+.post-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 점점점 버튼 */
+.more-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+/* 점점점 버튼 눌렀을 때 나오는 메뉴 */
+.post {
+  position: relative;
+}
+
+.post-menu {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  display: none;
+  min-width: 90px;
+  z-index: 10;
+}
+
+.post-menu.open {
+  display: block;
+}
+
+.post-menu button {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.post-menu button:hover {
+  background: #f5f5f5;
+}
+
+.post-menu .menu-delete {
+  color: #e53935;
+}
+
