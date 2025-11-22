@@ -25,6 +25,15 @@ const emailInput       = document.getElementById("email-input");
 const passwordInput    = document.getElementById("password-input");
 const emailLoginBtn    = document.getElementById("email-login-btn");
 const emailSignupLink  = document.getElementById("email-signup-link");
+const emailSignupLink  = document.getElementById("email-signup-link");
+// ▼ 여기부터 새로 추가
+const signupModal         = document.getElementById("signup-modal");
+const signupNameInput     = document.getElementById("signup-name-input");
+const signupEmailInput    = document.getElementById("signup-email-input");
+const signupPasswordInput = document.getElementById("signup-password-input");
+const signupSubmitBtn     = document.getElementById("signup-submit-btn");
+const signupCancelBtn     = document.getElementById("signup-cancel-btn");
+
 
 // 현재 로그인 유저 & 관리자 정보 ------------------------------------
 let currentUser = null;
