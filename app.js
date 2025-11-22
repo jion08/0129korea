@@ -372,7 +372,7 @@ if (
       await cred.user.sendEmailVerification();
 
       alert(
-        "가입이 완료되었습니다.\n이메일로 전송된 인증 메일을 확인한 뒤 다시 로그인해 주세요."
+        "가입이 완료되었습니다.\n이메일로 전송된 인증 메일을 확인한 뒤 다시 로그인해 주세요.\n(!!스팸함을 꼭 확인하세요!!)"
       );
 
       // 아직 이메일 인증 전이므로, 강제 로그아웃
@@ -407,7 +407,7 @@ if (emailLoginBtn && emailInput && passwordInput) {
         // 이메일 인증 안 됐으면 로그인 막기 + 인증 메일 다시 보내기
         await user.sendEmailVerification();
         alert(
-          "이메일이 아직 인증되지 않았습니다.\n메일함에서 인증 메일을 확인해 주세요. (인증 메일을 다시 보냈습니다.)"
+          "이메일이 아직 인증되지 않았습니다.\n메일함에서 인증 메일을 확인해 주세요. (인증 메일을 다시 보냈습니다.)\n(!!스팸함을 꼭 확인하세요!!)"
         );
         await auth.signOut();
         return;
