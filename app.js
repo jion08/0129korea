@@ -25,7 +25,7 @@ const emailInput       = document.getElementById("email-input");
 const passwordInput    = document.getElementById("password-input");
 const emailLoginBtn    = document.getElementById("email-login-btn");
 const emailSignupLink  = document.getElementById("email-signup-link");
-const emailSignupLink  = document.getElementById("email-signup-link");
+
 // ▼ 여기부터 새로 추가
 const signupModal         = document.getElementById("signup-modal");
 const signupNameInput     = document.getElementById("signup-name-input");
