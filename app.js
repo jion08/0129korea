@@ -115,6 +115,12 @@ function updateUserInfoUI() {
   });
 }
 */
+// 헤더 loginBtn → 이제 login.html 로 이동만!
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    window.location.href = "login.html";
+  });
+}
 
 // login.html 의 큰 Google 로그인 버튼
 if (googleLoginBtn) {
