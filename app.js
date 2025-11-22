@@ -100,8 +100,8 @@ function updateUserInfoUI() {
 
 // 4. Google 로그인 / 로그아웃 버튼 ----------------------------------
 
-// 헤더에 있는 기본 loginBtn (index, write 등)
-if (loginBtn) {
+// 헤더에 있는 기본 loginBtn (index, write 등) 안씀으로 주석처리
+/* if (loginBtn) {
   loginBtn.addEventListener("click", () => {
     auth
       .signInWithPopup(provider)
@@ -114,6 +114,7 @@ if (loginBtn) {
       });
   });
 }
+*/
 
 // login.html 의 큰 Google 로그인 버튼
 if (googleLoginBtn) {
