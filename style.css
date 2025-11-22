@@ -43,7 +43,6 @@ nav {
 }
 
 /* 상단 공통 버튼들 */
-
 .login-btn,
 .logout-btn,
 .back-btn {
@@ -63,6 +62,18 @@ nav {
   background: #ff4d4d;
   color: #fff;
 }
+
+/* a태그도 버튼처럼 보이게 */
+a.login-btn {
+  display: inline-block;
+  color: #111;
+  text-decoration: none;
+}
+
+a.login-btn:hover {
+  opacity: 0.85;
+}
+
 
 /* ============= 메인 레이아웃 ============= */
 
