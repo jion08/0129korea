@@ -1,13 +1,13 @@
 // app.js
 
-// 1. Firebase 초기화
+// 1. Firebase 초기화 -------------------------------------------------
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
-// HTML 요소들
+// HTML 요소들 --------------------------------------------------------
 const loginBtn       = document.getElementById("login-btn");
 const logoutBtn      = document.getElementById("logout-btn");
 const userInfo       = document.getElementById("user-info");
@@ -17,35 +17,36 @@ const postBtn        = document.getElementById("post-btn");
 const postList       = document.getElementById("post-list");
 const anonymousCheck = document.getElementById("anonymous-check");
 
-// 현재 로그인 유저 & 관리자 정보
+// 현재 로그인 유저 & 관리자 정보 ------------------------------------
 let currentUser = null;
 let adminEmails = [];   // Firestore에서 가져온 관리자 이메일 리스트
 let isAdmin = false;
 
-// ---------------------------------------------------
-// 2. Firestore에서 config/admins 문서를 실시간 구독
-// ---------------------------------------------------
-db.collection("config").doc("admins").onSnapshot((doc) => {
-  if (doc.exists) {
-    const data = doc.data();
-    adminEmails = Array.isArray(data.emails) ? data.emails : [];
-    console.log("관리자 이메일 리스트:", adminEmails);
-  } else {
-    adminEmails = [];
-  }
 
-  // 이미 로그인 되어 있다면, admin 여부 다시 계산
-  if (currentUser && currentUser.email) {
-    isAdmin = adminEmails.includes(currentUser.email);
-    updateUserInfoUI();
-  }
-}, (err) => {
-  console.error("admins 문서 구독 에러:", err);
-});
+// 2. Firestore에서 config/admins 문서 실시간 구독 -------------------
+db.collection("config").doc("admins").onSnapshot(
+  (doc) => {
+    if (doc.exists) {
+      const data = doc.data();
+      adminEmails = Array.isArray(data.emails) ? data.emails : [];
+      console.log("관리자 이메일 리스트:", adminEmails);
+    } else {
+      adminEmails = [];
+    }
 
-// ---------------------------------------------------
-// 3. UI에서 상단 userInfo / 버튼 상태 업데이트 하는 함수
-// ---------------------------------------------------
+    // 이미 로그인 되어 있으면 admin 여부 다시 계산
+    if (currentUser && currentUser.email) {
+      isAdmin = adminEmails.includes(currentUser.email);
+      updateUserInfoUI();
+    }
+  },
+  (err) => {
+    console.error("admins 문서 구독 에러:", err);
+  }
+);
+
+
+// 3. 상단 userInfo / 버튼 상태 업데이트 함수 -------------------------
 function updateUserInfoUI() {
   if (!userInfo) return;
 
@@ -68,9 +69,8 @@ function updateUserInfoUI() {
   }
 }
 
-// ---------------------------------------------------
-// 4. 구글 로그인 / 로그아웃 버튼
-// ---------------------------------------------------
+
+// 4. 구글 로그인 / 로그아웃 버튼 ------------------------------------
 if (loginBtn) {
   loginBtn.addEventListener("click", () => {
     auth
@@ -91,14 +91,12 @@ if (logoutBtn) {
   });
 }
 
-// ---------------------------------------------------
-// 5. 로그인 상태 변화 감지
-// ---------------------------------------------------
+
+// 5. 로그인 상태 변화 감지 -------------------------------------------
 auth.onAuthStateChanged((user) => {
   currentUser = user;
 
   if (user && user.email) {
-    // Firestore에서 가져온 adminEmails와 비교
     isAdmin = adminEmails.includes(user.email);
   } else {
     isAdmin = false;
@@ -107,9 +105,8 @@ auth.onAuthStateChanged((user) => {
   updateUserInfoUI();
 });
 
-// ---------------------------------------------------
-// 6. 글 작성 (로그인한 사람만 가능, 익명 체크 지원)
-// ---------------------------------------------------
+
+// 6. 글 작성 (로그인한 사람만, 익명 옵션 지원) -----------------------
 if (postBtn) {
   postBtn.addEventListener("click", async () => {
     const user = auth.currentUser;
@@ -160,15 +157,15 @@ if (postBtn) {
   });
 }
 
-// ---------------------------------------------------
-// 7. 글 목록 불러오기 + 관리자 삭제 버튼
-// ---------------------------------------------------
+
+// 7. 글 목록 불러오기 + 관리자/작성자 삭제 버튼 -----------------------
 if (postList) {
   db.collection("posts")
     .orderBy("createdAt", "desc")
     .limit(50)
     .onSnapshot((snapshot) => {
       postList.innerHTML = "";
+
       snapshot.forEach((doc) => {
         const data = doc.data();
         const div = document.createElement("div");
@@ -180,7 +177,11 @@ if (postList) {
 
         const author = data.authorName || "익명";
 
-        const canDelete = isAdmin; // (원하면 글쓴이 본인도 허용 가능)
+        // 삭제 가능 조건:
+        // 1) 관리자이거나
+        // 2) 현재 로그인 유저가 글 작성자(uid 같음)
+        const canDelete =
+          isAdmin || (currentUser && currentUser.uid === data.uid);
 
         div.innerHTML = `
           <div class="post-title">
@@ -194,7 +195,7 @@ if (postList) {
         postList.appendChild(div);
       });
 
-      // 삭제 버튼 이벤트 연결
+      // 삭제 버튼 클릭 이벤트 연결
       const deleteButtons = postList.querySelectorAll(".delete-btn");
       deleteButtons.forEach((btn) => {
         btn.addEventListener("click", async (e) => {
@@ -213,7 +214,3 @@ if (postList) {
       });
     });
 }
-
-
-//관리자 + 글 작성자 본인”만 삭제 가능하게 만들기
-const canDelete = isAdmin || (currentUser && currentUser.uid === data.uid);
