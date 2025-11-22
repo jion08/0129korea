@@ -213,3 +213,7 @@ if (postList) {
       });
     });
 }
+
+
+//관리자 + 글 작성자 본인”만 삭제 가능하게 만들기
+const canDelete = isAdmin || (currentUser && currentUser.uid === data.uid);
