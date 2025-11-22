@@ -534,3 +534,19 @@ main {
   text-decoration: underline;
 }
 
+/* 방문자 수 표시 박스 */
+.visitor-box {
+  position: absolute;
+  top: 140px;          /* 필요하면 높이 조정 */
+  left: 40px;          /* 필요하면 위치 조정 */
+  background: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-size: 15px;
+  line-height: 1.4;
+  color: #333;
+  width: 180px;
+}
+
+
