@@ -6,31 +6,31 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header>
-  <div class="logo">0129 COMMUNITY</div>
-  <nav>
-    <span id="user-info"></span>
-    <button id="login-btn" class="login-btn">Google 로그인</button>
-    <button id="logout-btn" class="logout-btn" style="display: none;">로그아웃</button>
-  </nav>
-</header>
+  <header>
+    <div class="logo">0129 COMMUNITY</div>
+    <nav>
+      <span id="user-info"></span>
+      <button id="login-btn" class="login-btn">Google 로그인</button>
+      <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
+    </nav>
+  </header>
 
   <main>
-   <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
-
+    <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
 
     <section class="list-section">
-      <h2>최근 글</h2>
+      <div class="list-header">
+        <h2>최근 글</h2>
+      </div>
       <div id="post-list"></div>
     </section>
   </main>
 
-  <!-- Firebase SDK (compat 버전) -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
 
-  <!-- 네가 만든 설정 / 앱 코드 -->
   <script src="firebase-config.js"></script>
   <script src="app.js"></script>
 </body>
