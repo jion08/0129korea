@@ -573,22 +573,3 @@ function getTodayDate() {
 }
 
 function loadPostCounters() {
-  const today = getTodayDate();
-
-  // 전체 게시글 수
-  db.collection("posts")
-    .get()
-    .then(snapshot => {
-      document.getElementById("total-posts").innerText = snapshot.size;
-    });
-
-  // 오늘 작성된 게시글 수
-  db.collection("posts")
-    .where("date", "==", today)
-    .get()
-    .then(snapshot => {
-      document.getElementById("today-posts").innerText = snapshot.size;
-    });
-}
-
-loadPostCounters();
