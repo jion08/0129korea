@@ -1,0 +1,8 @@
+<div class="top-bar">
+    <div class="visitor-box">
+        <p>오늘 방문: {{ today_visit }}명</p>
+        <p>전체 방문: {{ total_visit }}명</p>
+    </div>
+
+    <button class="write-btn">글쓰기</button>
+</div>
