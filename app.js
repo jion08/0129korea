@@ -33,6 +33,9 @@ const signupEmailInput    = document.getElementById("signup-email-input");
 const signupPasswordInput = document.getElementById("signup-password-input");
 const signupSubmitBtn     = document.getElementById("signup-submit-btn");
 const signupCancelBtn     = document.getElementById("signup-cancel-btn");
+// ▼ 여기부터 새로 추가 — 공지 박스 요소
+const noticeBox   = document.getElementById("notice-box");
+const noticeTitle = document.getElementById("notice-title");
 
 
 // 현재 로그인 유저 & 관리자 정보 ------------------------------------
