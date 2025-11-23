@@ -5,19 +5,20 @@
   <title>0129Korea</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* 추가된 이미지 스타일 */
+    /* 상단 이미지 (1/8 크기) */
     .top-banner-img {
-      width: 12.5%; /* 원본의 1/8 */
+      width: 12.5%;
       max-width: 200px;
       display: block;
       margin: 10px auto;
     }
 
+    /* 글쓰기 버튼 위 이미지 (1/4 크기) */
     .middle-banner-img {
-      width: 10%; /* 원본의 1/10 */
-      max-width: 150px;
+      width: 25%; /* 4분의 1 크기 */
+      max-width: 350px;
       display: block;
-      margin: 10px auto; /* 중앙 정렬 */
+      margin: 15px auto; /* 중앙 정렬 */
     }
   </style>
 </head>
@@ -37,12 +38,10 @@
   <img src="https://i.postimg.cc/GmnjXLKq/0129-background.png" class="top-banner-img" />
 
 <main>
-
-  <!-- 🔥 글쓰기 버튼 위에 새 이미지 (1/10 크기) -->
+  <!-- 🔥 글쓰기 버튼 위 이미지 (4분의 1 크기) -->
   <img src="https://i.postimg.cc/fW2d3w1D/0129-background-005-(1).png" class="middle-banner-img" />
 
   <div id="visitor-box" class="visitor-box"></div>
-
   <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
 
   <!-- 공지 박스 -->
@@ -58,7 +57,6 @@
     </div>
     <div id="post-list"></div>
   </section>
-
 </main>
 
 <!-- Firebase SDKs -->
@@ -74,7 +72,6 @@
     <a href="https://github.com/jion08" target="_blank">@jion08</a>, 
     <a href="https://github.com/sxi0129" target="_blank">@sxi0129</a>
   </p>
-    
   <p class="footer-contact">
     게시물 신고/문의 :
     <a href="mailto:0129.pamperer420@passinbox.com">
