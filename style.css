@@ -549,4 +549,27 @@ main {
   width: 180px;
 }
 
+/* ===== 공지 박스 ===== */
+
+.notice-box {
+  max-width: 850px;
+  margin: 20px auto 10px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.notice-label {
+  color: #e53935;   /* 빨간 글씨 "공지" */
+  font-weight: 700;
+}
+
+#notice-title {
+  font-weight: 500;
+}
 
