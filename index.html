@@ -8,25 +8,37 @@
 <body>
   <header>
     <a href="index.html" class="logo">
-  <img
-    src="https://i.postimg.cc/50pBY1Lz/unnamed.png"
-    alt="0129 COMMUNITY 로고"
-  />
-</a>
+      <img
+        src="https://i.postimg.cc/50pBY1Lz/unnamed.png"
+        alt="0129 COMMUNITY 로고"
+      />
+    </a>
     <nav>
-  <span id="user-info"></span>
-  <button id="login-btn" class="login-btn">로그인</button>
-  <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
-</nav>
+      <span id="user-info"></span>
+      <button id="login-btn" class="login-btn">로그인</button>
+      <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
+    </nav>
   </header>
+
 <main>
+
+  <!-- 방문자 수 -->
   <div id="visitor-box" class="visitor-box"></div>
+
+  <!-- 🔥 오늘/전체 게시물 개수 -->
+  <div id="post-stats-box" class="visitor-box">
+    <p>오늘 작성된 게시물: <span id="today-posts">0</span>개</p>
+    <p>전체 작성된 게시물: <span id="total-posts">0</span>개</p>
+  </div>
+
   <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
+
   <!-- 공지 박스 -->
   <div id="notice-box" class="notice-box" style="display:none;">
     <span class="notice-label">공지</span>
     <span id="notice-title"></span>
   </div>
+
   <!-- 최근 글 카드 -->
   <section class="list-section">
     <div class="list-header">
@@ -34,14 +46,17 @@
     </div>
     <div id="post-list"></div>
   </section>
+
 </main>
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  <script src="app.js"></script>
-  <footer class="footer">
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="app.js"></script>
+
+<footer class="footer">
   <p>
     designed by 
     <a href="https://github.com/jion08" target="_blank">@jion08</a>, 
