@@ -571,4 +571,7 @@ main {
 #notice-title {
   font-weight: 500;
 }
+#post-count-box {
+  margin-top: 10px;   /* 방문자 박스와 간격 줌 */
+}
 
