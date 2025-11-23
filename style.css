@@ -552,8 +552,6 @@ main {
 /* ===== 공지 박스 ===== */
 
 .notice-box {
-  width: 90%;
-  max-width: 900px;
   margin: 20px auto 10px auto;
   padding: 10px 15px;
   background: white;
@@ -563,6 +561,7 @@ main {
   align-items: center;
   gap: 8px;
 }
+
 
 .notice-label {
   color: #e53935;   /* 빨간 글씨 "공지" */
