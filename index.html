@@ -22,29 +22,25 @@
 
   </header>
 
-  <main>
-    <div id="visitor-box" class="visitor-box"> </div>
+<main>
+  <div id="visitor-box" class="visitor-box"></div>
 
-    <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
+  <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
 
-    <!-- 공지 박스 -->
-<div id="notice-box" class="notice-box" style="display:none;">
-  <span class="notice-label">공지</span>
-  <span id="notice-title"></span>
-</div>
+  <!-- 공지 박스 -->
+  <div id="notice-box" class="notice-box" style="display:none;">
+    <span class="notice-label">공지</span>
+    <span id="notice-title"></span>
+  </div>
 
-<!-- 최근 글 카드 시작 -->
-<div class="list-section">
-  ...
-</div>
-
-    <section class="list-section">
-      <div class="list-header">
-        <h2>최근 글</h2>
-      </div>
-      <div id="post-list"></div>
-    </section>
-  </main>
+  <!-- 최근 글 카드 -->
+  <section class="list-section">
+    <div class="list-header">
+      <h2>최근 글</h2>
+    </div>
+    <div id="post-list"></div>
+  </section>
+</main>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
