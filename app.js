@@ -561,4 +561,34 @@ async function updateVisitorCount() {
 if (visitorBox) {
   updateVisitorCount();
 }
+const db = firebase.firestore();
 
+// 오늘 날짜 YYYY-MM-DD 만들기
+function getTodayDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function loadPostCounters() {
+  const today = getTodayDate();
+
+  // 전체 게시글 수
+  db.collection("posts")
+    .get()
+    .then(snapshot => {
+      document.getElementById("total-posts").innerText = snapshot.size;
+    });
+
+  // 오늘 작성된 게시글 수
+  db.collection("posts")
+    .where("date", "==", today)
+    .get()
+    .then(snapshot => {
+      document.getElementById("today-posts").innerText = snapshot.size;
+    });
+}
+
+loadPostCounters();
