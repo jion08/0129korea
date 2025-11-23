@@ -268,6 +268,7 @@ if (postBtn) {
 
 
 // 7. 글 목록 불러오기 + 점점점 메뉴(삭제/신고) -----------------------
+// 7. 글 목록 불러오기 + 점점점 메뉴(공지/삭제/신고) -------------------
 if (postList) {
   db.collection("posts")
     .orderBy("createdAt", "desc")
@@ -294,25 +295,28 @@ if (postList) {
         const canDelete =
           isAdmin || (currentUser && currentUser.uid === data.uid);
 
-div.innerHTML = `
-  <div class="post-title">
-    <span>${data.title}</span>
-    <button class="more-btn" data-id="${doc.id}">⋯</button>
-  </div>
-  <div class="post-meta">작성자: ${authorDisplay} · ${created}</div>
-  <div class="post-content">${data.content}</div>
+        div.innerHTML = `
+          <div class="post-title">
+            <span>${data.title}</span>
+            <button class="more-btn" data-id="${doc.id}">⋯</button>
+          </div>
+          <div class="post-meta">작성자: ${authorDisplay} · ${created}</div>
+          <div class="post-content">${data.content}</div>
 
-  <div class="post-menu" data-id="${doc.id}">
-    ${
-      isAdmin
-        ? `<button class="menu-notice" data-id="${doc.id}" data-title="${data.title}">공지 등록</button>`
-        : ""
-    }
-    ${canDelete ? `<button class="menu-delete" data-id="${doc.id}">삭제</button>` : ""}
-    <button class="menu-report" data-id="${doc.id}">신고</button>
-  </div>
-`;
-
+          <div class="post-menu" data-id="${doc.id}">
+            ${
+              isAdmin
+                ? `<button class="menu-notice" data-id="${doc.id}" data-title="${data.title}">공지 등록</button>`
+                : ""
+            }
+            ${
+              canDelete
+                ? `<button class="menu-delete" data-id="${doc.id}">삭제</button>`
+                : ""
+            }
+            <button class="menu-report" data-id="${doc.id}">신고</button>
+          </div>
+        `;
 
         postList.appendChild(div);
       });
@@ -333,6 +337,34 @@ div.innerHTML = `
         });
       });
 
+      // 공지 등록 버튼 (관리자만 보임)
+      const noticeButtons = postList.querySelectorAll(".menu-notice");
+      noticeButtons.forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+          const id = e.currentTarget.getAttribute("data-id");
+          const title = e.currentTarget.getAttribute("data-title") || "";
+
+          if (!id) return;
+
+          if (!confirm(`이 게시물을 공지로 등록할까요?\n\n제목: ${title}`)) return;
+
+          try {
+            await db.collection("config").doc("notice").set({
+              postId: id,
+              title: title,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+            alert("공지로 등록되었습니다.");
+          } catch (err) {
+            console.error("공지 등록 에러:", err);
+            alert("공지 등록 중 오류가 발생했습니다.");
+          }
+
+          const menu = postList.querySelector(`.post-menu[data-id="${id}"]`);
+          if (menu) menu.classList.remove("open");
+        });
+      });
+
       // 삭제 버튼 (관리자 + 글쓴이만)
       const deleteButtons = postList.querySelectorAll(".menu-delete");
       deleteButtons.forEach((btn) => {
@@ -350,29 +382,6 @@ div.innerHTML = `
           }
         });
       });
-
-      // 공지 등록 버튼 (관리자만 보임)
-const noticeButtons = postList.querySelectorAll(".menu-notice");
-noticeButtons.forEach((btn) => {
-  btn.addEventListener("click", async (e) => {
-    const id = e.currentTarget.getAttribute("data-id");
-    const title = e.currentTarget.getAttribute("data-title") || "";
-
-    if (!id) return;
-
-    if (!confirm(`이 게시물을 공지로 등록할까요?\n\n제목: ${title}`)) return;
-
-    try {
-      await db.collection("config").doc("notice").set({
-        postId: id,
-        title: title,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      alert("공지로 등록되었습니다.");
-    } catch (err) {
-      console.error("공지 등록 에러:", err);
-      alert("공지 등록 중 오류가 발생했습니다.");
-    }
 
       // 신고 버튼 (임시: 알림만)
       const reportButtons = postList.querySelectorAll(".menu-report");
@@ -395,7 +404,6 @@ noticeButtons.forEach((btn) => {
       });
     });
 }
-
 
 // 8. 이메일 로그인 / 가입 (login.html 전용) --------------------------
 
