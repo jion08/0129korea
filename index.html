@@ -17,6 +17,26 @@
       display: block;
       margin: 15px auto; /* 중앙 정렬 */
     }
+
+    /* 🔥 방문자 박스와 동일 스타일 */
+    .visitor-box, .post-counter-box {
+      width: 90%;
+      max-width: 400px;
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px auto;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .post-counter-box span {
+      display: block;
+      font-size: 17px;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
@@ -30,18 +50,32 @@
       <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
     </nav>
   </header>
+
   <!-- 🔥 헤더 바로 아래 이미지 -->
   <img src="https://i.postimg.cc/GmnjXLKq/0129-background.png" class="top-banner-img" />
+
 <main>
+
   <!-- 🔥 글쓰기 버튼 위 이미지 (원본 크기) -->
   <img src="https://i.postimg.cc/fW2d3w1D/0129-background-005-(1).png" class="middle-banner-img" />
+
+  <!-- 기존 방문자 박스 -->
   <div id="visitor-box" class="visitor-box"></div>
+
+  <!-- 🔥 오늘 / 전체 글 카운트 박스 -->
+  <div id="post-counter-box" class="post-counter-box">
+      오늘 작성된 글: <span id="today-post-count">0</span>
+      전체 작성된 글: <span id="total-post-count">0</span>
+  </div>
+
   <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
+
   <!-- 공지 박스 -->
   <div id="notice-box" class="notice-box" style="display:none;">
     <span class="notice-label">공지</span>
     <span id="notice-title"></span>
   </div>
+
   <!-- 최근 글 카드 -->
   <section class="list-section">
     <div class="list-header">
@@ -50,12 +84,14 @@
     <div id="post-list"></div>
   </section>
 </main>
+
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="app.js"></script>
+
 <footer class="footer">
   <p>
     designed by 
