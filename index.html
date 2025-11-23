@@ -12,12 +12,10 @@
       display: block;
       margin: 10px auto;
     }
-
-    /* 글쓰기 버튼 위 이미지 — 원본의 3배 크기 */
+    /* 글쓰기 버튼 위 이미지 — 원본 크기 */
     .middle-banner-img {
-      width: 300%;  /* 🔥 원본 크기의 3배 */
       display: block;
-      margin: 15px auto;
+      margin: 15px auto; /* 중앙 정렬 */
     }
   </style>
 </head>
@@ -32,23 +30,18 @@
       <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
     </nav>
   </header>
-
   <!-- 🔥 헤더 바로 아래 이미지 -->
   <img src="https://i.postimg.cc/GmnjXLKq/0129-background.png" class="top-banner-img" />
-
 <main>
-  <!-- 🔥 글쓰기 버튼 위 이미지 (3배 크기) -->
+  <!-- 🔥 글쓰기 버튼 위 이미지 (원본 크기) -->
   <img src="https://i.postimg.cc/fW2d3w1D/0129-background-005-(1).png" class="middle-banner-img" />
-
   <div id="visitor-box" class="visitor-box"></div>
   <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
-
   <!-- 공지 박스 -->
   <div id="notice-box" class="notice-box" style="display:none;">
     <span class="notice-label">공지</span>
     <span id="notice-title"></span>
   </div>
-
   <!-- 최근 글 카드 -->
   <section class="list-section">
     <div class="list-header">
@@ -57,14 +50,12 @@
     <div id="post-list"></div>
   </section>
 </main>
-
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="app.js"></script>
-
 <footer class="footer">
   <p>
     designed by 
