@@ -66,6 +66,31 @@ db.collection("config").doc("admins").onSnapshot(
   }
 );
 
+// ---------------------------------------------------
+// Firestore에서 config/notice 문서 실시간 구독 (공지 표시용)
+// ---------------------------------------------------
+db.collection("config").doc("notice").onSnapshot(
+  (doc) => {
+    if (!noticeBox || !noticeTitle) return;
+
+    if (doc.exists) {
+      const data = doc.data();
+      noticeTitle.textContent = data.title || "";
+      if (noticeTitle.textContent.trim() === "") {
+        noticeBox.style.display = "none";
+      } else {
+        noticeBox.style.display = "flex";
+      }
+    } else {
+      noticeBox.style.display = "none";
+    }
+  },
+  (err) => {
+    console.error("notice 문서 구독 에러:", err);
+  }
+);
+
+
 
 // 3. 상단 userInfo / 버튼 상태 업데이트 함수 -------------------------
 function updateUserInfoUI() {
@@ -269,19 +294,25 @@ if (postList) {
         const canDelete =
           isAdmin || (currentUser && currentUser.uid === data.uid);
 
-        div.innerHTML = `
-          <div class="post-title">
-            <span>${data.title}</span>
-            <button class="more-btn" data-id="${doc.id}">⋯</button>
-          </div>
-          <div class="post-meta">작성자: ${authorDisplay} · ${created}</div>
-          <div class="post-content">${data.content}</div>
+div.innerHTML = `
+  <div class="post-title">
+    <span>${data.title}</span>
+    <button class="more-btn" data-id="${doc.id}">⋯</button>
+  </div>
+  <div class="post-meta">작성자: ${authorDisplay} · ${created}</div>
+  <div class="post-content">${data.content}</div>
 
-          <div class="post-menu" data-id="${doc.id}">
-            ${canDelete ? `<button class="menu-delete" data-id="${doc.id}">삭제</button>` : ""}
-            <button class="menu-report" data-id="${doc.id}">신고</button>
-          </div>
-        `;
+  <div class="post-menu" data-id="${doc.id}">
+    ${
+      isAdmin
+        ? `<button class="menu-notice" data-id="${doc.id}" data-title="${data.title}">공지 등록</button>`
+        : ""
+    }
+    ${canDelete ? `<button class="menu-delete" data-id="${doc.id}">삭제</button>` : ""}
+    <button class="menu-report" data-id="${doc.id}">신고</button>
+  </div>
+`;
+
 
         postList.appendChild(div);
       });
@@ -319,6 +350,29 @@ if (postList) {
           }
         });
       });
+
+      // 공지 등록 버튼 (관리자만 보임)
+const noticeButtons = postList.querySelectorAll(".menu-notice");
+noticeButtons.forEach((btn) => {
+  btn.addEventListener("click", async (e) => {
+    const id = e.currentTarget.getAttribute("data-id");
+    const title = e.currentTarget.getAttribute("data-title") || "";
+
+    if (!id) return;
+
+    if (!confirm(`이 게시물을 공지로 등록할까요?\n\n제목: ${title}`)) return;
+
+    try {
+      await db.collection("config").doc("notice").set({
+        postId: id,
+        title: title,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      alert("공지로 등록되었습니다.");
+    } catch (err) {
+      console.error("공지 등록 에러:", err);
+      alert("공지 등록 중 오류가 발생했습니다.");
+    }
 
       // 신고 버튼 (임시: 알림만)
       const reportButtons = postList.querySelectorAll(".menu-report");
