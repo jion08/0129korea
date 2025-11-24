@@ -512,64 +512,87 @@ async function updateVisitorCount() {
   try {
     const statsRef = db.collection("visitors").doc("stats");
     const statsDoc = await statsRef.get();
-
-    const todayString = new Date().toISOString().slice(0, 10); // "2025-11-22"
+    const todayString = new Date().toISOString().slice(0, 10); // "2025-11-24"
 
     if (!statsDoc.exists) {
-      // 문서가 없으면 처음 생성
       await statsRef.set({
         total: 1,
         today: 1,
         todayDate: todayString
       });
-
-      visitorBox.textContent = `오늘 방문: 1명\n전체 방문: 1명`;
+      visitorBox.innerHTML =
+        `오늘 방문: 1명<br>` +
+        `전체 방문: 1명`;
       return;
     }
 
     const data = statsDoc.data();
     let { total, today, todayDate } = data;
 
-    // 날짜가 바뀌었으면 오늘 방문자 초기화
     if (todayDate !== todayString) {
       today = 0;
       todayDate = todayString;
     }
 
-    // 방문자 증가
     total += 1;
     today += 1;
 
-    // Firestore 업데이트
-    await statsRef.update({
-      total,
-      today,
-      todayDate
-    });
+    await statsRef.update({ total, today, todayDate });
 
     visitorBox.innerHTML =
       `오늘 방문: ${today}명<br>` +
       `전체 방문: ${total}명`;
-
   } catch (err) {
     console.error("방문자 수 로드 에러:", err);
     if (visitorBox) visitorBox.textContent = "방문자 정보를 불러올 수 없음";
   }
 }
 
-// index.html 접속하면 즉시 방문자 증가
 if (visitorBox) {
   updateVisitorCount();
 }
-const db = firebase.firestore();
 
-// 오늘 날짜 YYYY-MM-DD 만들기
-function getTodayDate() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
+// =======================
+// 게시물 카운트 시스템
+// =======================
+const todayPostsSpan = document.getElementById("today-posts");
+const totalPostsSpan = document.getElementById("total-posts");
 
 function loadPostCounters() {
+  if (!todayPostsSpan || !totalPostsSpan) return;
+
+  const postsRef = db.collection("posts");
+
+  // 전체 게시물 수
+  postsRef
+    .get()
+    .then((snapshot) => {
+      totalPostsSpan.textContent = snapshot.size;
+    })
+    .catch((err) => {
+      console.error("전체 게시물 수 불러오기 오류:", err);
+    });
+
+  // 오늘 게시물 수 (createdAt 기준)
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+
+  postsRef
+    .where("createdAt", ">=", firebase.firestore.Timestamp.fromDate(start))
+    .where("createdAt", "<", firebase.firestore.Timestamp.fromDate(end))
+    .get()
+    .then((snapshot) => {
+      todayPostsSpan.textContent = snapshot.size;
+    })
+    .catch((err) => {
+      console.error("오늘 게시물 수 불러오기 오류:", err);
+    });
+}
+
+// index.html 에서만 동작하도록 요소가 있을 때만 실행
+if (todayPostsSpan && totalPostsSpan) {
+  loadPostCounters();
+}
+
