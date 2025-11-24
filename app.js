@@ -506,12 +506,16 @@ if (signupCancelBtn && signupModal) {
 // =======================
 // 방문자 수 카운트 시스템
 // =======================
-const visitorBox = document.getElementById("visitor-box");
+const visitorBox   = document.getElementById("visitor-box");
+const todayVisitEl = document.getElementById("today-visit");
+const totalVisitEl = document.getElementById("total-visit");
 
 async function updateVisitorCount() {
+  if (!visitorBox || !todayVisitEl || !totalVisitEl) return;
+
   try {
-    const statsRef = db.collection("visitors").doc("stats");
-    const statsDoc = await statsRef.get();
+    const statsRef   = db.collection("visitors").doc("stats");
+    const statsDoc   = await statsRef.get();
     const todayString = new Date().toISOString().slice(0, 10); // "2025-11-24"
 
     if (!statsDoc.exists) {
@@ -520,15 +524,16 @@ async function updateVisitorCount() {
         today: 1,
         todayDate: todayString
       });
-      visitorBox.innerHTML =
-        `오늘 방문: 1명<br>` +
-        `전체 방문: 1명`;
+
+      todayVisitEl.textContent = `오늘 방문: 1명`;
+      totalVisitEl.textContent = `전체 방문: 1명`;
       return;
     }
 
     const data = statsDoc.data();
     let { total, today, todayDate } = data;
 
+    // 날짜 바뀌면 오늘 방문자 0부터
     if (todayDate !== todayString) {
       today = 0;
       todayDate = todayString;
@@ -539,12 +544,11 @@ async function updateVisitorCount() {
 
     await statsRef.update({ total, today, todayDate });
 
-    visitorBox.innerHTML =
-      `오늘 방문: ${today}명<br>` +
-      `전체 방문: ${total}명`;
+    todayVisitEl.textContent = `오늘 방문: ${today}명`;
+    totalVisitEl.textContent = `전체 방문: ${total}명`;
   } catch (err) {
     console.error("방문자 수 로드 에러:", err);
-    if (visitorBox) visitorBox.textContent = "방문자 정보를 불러올 수 없음";
+    visitorBox.textContent = "방문자 정보를 불러올 수 없음";
   }
 }
 
