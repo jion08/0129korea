@@ -19,15 +19,18 @@
 
 <main>
 
-  <!-- 🔥 방문자 카운트 (원래 있던 위치 그대로 유지) -->
-  <div id="visitor-box" class="visitor-box"></div>
+<div id="visitor-box" class="visitor-box">
+  <!-- 방문자 -->
+  <p id="today-visit">오늘 방문: 0명</p>
+  <p id="total-visit">전체 방문: 0명</p>
 
-  <!-- 🔥 게시물 카운트 (방문자 아래에 추가) -->
-  <div id="post-count-box" class="visitor-box">
-    <p>오늘 작성된 게시물: <span id="today-posts">0</span> 개</p>
-    <p>전체 작성된 게시물: <span id="total-posts">0</span> 개</p>
-  </div>
+  <hr />
 
+  <!-- 게시물 -->
+  <p>오늘 작성된 게시물: <span id="today-posts">0</span>개</p>
+  <p>전체 작성된 게시물: <span id="total-posts">0</span>개</p>
+</div>
+  
   <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
 
   <!-- 공지 박스 -->
