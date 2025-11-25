@@ -1,51 +1,65 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>0129Korea</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <title>0129Korea</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">
-      <img src="https://i.postimg.cc/50pBY1Lz/unnamed.png" alt="0129 COMMUNITY 로고" />
-    </a>
-    <nav>
-      <span id="user-info"></span>
-      <button id="login-btn" class="login-btn">로그인</button>
-      <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
-    </nav>
-  </header>
+  <header>
+    <a href="index.html" class="logo">
+      <img src="https://i.postimg.cc/50pBY1Lz/unnamed.png" alt="0129 COMMUNITY 로고" />
+    </a>
+    <nav>
+      <span id="user-info"></span>
+      <button id="login-btn" class="login-btn">로그인</button>
+      <button id="logout-btn" class="logout-btn" style="display:none;">로그아웃</button>
+    </nav>
+  </header>
 
-<main>
+<main class="main-layout">
+    
+    <!-- 1. 왼쪽: 방문자/게시물 정보 박스 (Flex Item 1) -->
+    <div id="visitor-box" class="visitor-box">
+        <!-- 방문자 -->
+        <p id="today-visit">오늘 방문: 0명</p>
+        <p id="total-visit">전체 방문: 0명</p>
 
-<div id="visitor-box" class="visitor-box">
-  <!-- 방문자 -->
-  <p id="today-visit">오늘 방문: 0명</p>
-  <p id="total-visit">전체 방문: 0명</p>
+        <hr />
 
-  <hr />
-
-  <!-- 게시물 -->
-  <p>오늘 작성된 게시물: <span id="today-posts">0</span>개</p>
-  <p>전체 작성된 게시물: <span id="total-posts">0</span>개</p>
-</div>
-  
-  <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
-
-  <!-- 공지 박스 -->
-  <div id="notice-box" class="notice-box" style="display:none;">
-    <span class="notice-label">공지</span>
-    <span id="notice-title"></span>
-  </div>
-
-  <!-- 최근 글 카드 -->
-  <section class="list-section">
-    <div class="list-header">
-      <h2>최근 글</h2>
+        <!-- 게시물 -->
+        <p>오늘 작성된 게시물: <span id="today-posts">0</span>개</p>
+        <p>전체 작성된 게시물: <span id="total-posts">0</span>개</p>
     </div>
-    <div id="post-list"></div>
-  </section>
+    
+    <!-- 2. 중앙: 글쓰기 버튼 + 공지 + 최근 글 목록 (Flex Item 2) -->
+    <div class="content-center-wrapper">
+        <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
+
+        <!-- 공지 박스 -->
+        <div id="notice-box" class="notice-box" style="display:none;">
+            <span class="notice-label">공지</span>
+            <span id="notice-title"></span>
+        </div>
+
+        <!-- 최근 글 카드 -->
+        <section class="list-section">
+            <div class="list-header">
+                <h2>최근 글</h2>
+            </div>
+            <div id="post-list"></div>
+        </section>
+    </div>
+
+    <!-- 3. 오른쪽: 광고/이미지 박스 (Flex Item 3) -->
+    <div id="ad-box" class="ad-box">
+        <!-- 요청하신 이미지 삽입 -->
+        <img 
+            src="https://i.postimg.cc/tJX3765F/seukeulinsyas-2025-11-25-ohu-11-16-46.png" 
+            alt="광고 배너" 
+            class="ad-image"
+        />
+    </div>
 
 </main>
 
@@ -57,18 +71,18 @@
 <script src="app.js"></script>
 
 <footer class="footer">
-  <p>
-    designed by 
-    <a href="https://github.com/jion08" target="_blank">@jion08</a>, 
-    <a href="https://github.com/sxi0129" target="_blank">@sxi0129</a>
-  </p>
-    
-  <p class="footer-contact">
-    게시물 신고/문의 :
-    <a href="mailto:0129.pamperer420@passinbox.com">
-      0129.pamperer420@passinbox.com
-    </a>
-  </p>
+  <p>
+    designed by 
+    <a href="https://github.com/jion08" target="_blank">@jion08</a>, 
+    <a href="https://github.com/sxi0129" target="_blank">@sxi0129</a>
+  </p>
+    
+  <p class="footer-contact">
+    게시물 신고/문의 :
+    <a href="mailto:0129.pamperer420@passinbox.com">
+      0129.pamperer420@passinbox.com
+    </a>
+  </p>
 </footer>
 </body>
 </html>
