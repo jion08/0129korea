@@ -1,21 +1,20 @@
-/* ... (생략된 기존 CSS 코드) ... */
+/* ... (기존 CSS 코드는 동일합니다) ... */
 
-/* 오른쪽 - 광고/이미지 박스 (새로 추가) */
+/* 오른쪽 - 광고/이미지 박스 */
 .ad-box {
-    width: 230px; /* 왼쪽 박스와 동일한 너비 */
-    background: #e53935; /* 빨간색 (원래 요청하신 빨간색 계열) */
+    width: 230px; 
+    background: #e53935; /* 박스 배경색은 그대로 유지되지만, 이미지가 꽉 채워서 보이지 않을 수 있습니다. */
     border-radius: 12px;
-    overflow: hidden; /* 이미지가 박스를 벗어나지 않도록 처리 */
-    flex-shrink: 0; /* 크기 줄어들지 않도록 고정 */
-    padding: 0; /* 이미지가 꽉 차도록 패딩 제거 */
+    overflow: hidden; 
+    flex-shrink: 0; 
+    padding: 0; 
 }
 
 .ad-image {
-    width: 100%; /* 부모 박스의 너비에 맞춤 */
-    height: 100%; /* 부모 박스의 높이에 맞춤 */
-    object-fit: cover; /* 비율을 유지하며 박스를 꽉 채움 (일부 잘릴 수 있음) */
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* 이미지가 박스에 꽉 차도록 하되, 비율 유지 */
     display: block;
 }
 
-
-/* ... (생략된 기존 CSS 코드) ... */
+/* ... (나머지 CSS 코드는 동일합니다) ... */
