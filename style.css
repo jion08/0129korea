@@ -1,20 +1,576 @@
-/* ... (기존 CSS 코드는 동일합니다) ... */
+/* ============= 공통 기본 스타일 ============= */
 
-/* 오른쪽 - 광고/이미지 박스 */
-.ad-box {
-    width: 230px; 
-    background: #e53935; /* 박스 배경색은 그대로 유지되지만, 이미지가 꽉 채워서 보이지 않을 수 있습니다. */
-    border-radius: 12px;
-    overflow: hidden; 
-    flex-shrink: 0; 
-    padding: 0; 
+* {
+  box-sizing: border-box;
 }
 
-.ad-image {
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; /* 이미지가 박스에 꽉 차도록 하되, 비율 유지 */
-    display: block;
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans KR",
+    sans-serif;
+  background: #f5f5f5;
 }
 
-/* ... (나머지 CSS 코드는 동일합니다) ... */
+/* ============= 헤더 / 로고 ============= */
+
+header {
+  background: #111;
+  color: #fff;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 32px;
+  display: block;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#user-info {
+  font-size: 13px;
+}
+
+/* 상단 공통 버튼들 */
+.login-btn,
+.logout-btn,
+.back-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.login-btn,
+.back-btn {
+  background: #fff;
+}
+
+.logout-btn {
+  background: #ff4d4d;
+  color: #fff;
+}
+
+/* a태그도 버튼처럼 보이게 */
+a.login-btn {
+  display: inline-block;
+  color: #111;
+  text-decoration: none;
+}
+
+a.login-btn:hover {
+  opacity: 0.85;
+}
+
+
+/* ============= 메인 레이아웃 ============= */
+
+main {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 0 10px;
+}
+
+/* 메인 페이지 - 글쓰기 버튼 */
+
+.write-btn {
+  margin: 10px 0 20px;
+  padding: 8px 16px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.write-btn:hover {
+  opacity: 0.85;
+}
+
+/* ============= 글 목록 카드 ============= */
+
+.list-section {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.list-header h2 {
+  margin: 0;
+}
+
+/* 게시물 하나 */
+
+.post {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+  position: relative; /* 점점점 메뉴 위치용 */
+}
+
+.post:last-child {
+  border-bottom: none;
+}
+
+/* 제목 + 점점점 버튼 줄 */
+
+.post-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.post-meta {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 4px;
+}
+
+.post-content {
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+/* 점점점 버튼 */
+
+.more-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+/* 점점점 눌렀을 때 뜨는 메뉴 */
+
+.post-menu {
+  position: absolute;
+  top: 32px;
+  right: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  display: none; /* 기본 숨김 */
+  min-width: 90px;
+  z-index: 10;
+}
+
+.post-menu.open {
+  display: block;
+}
+
+.post-menu button {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.post-menu button:hover {
+  background: #f5f5f5;
+}
+
+.post-menu .menu-delete {
+  color: #e53935;
+}
+
+/* ============= 글쓰기 페이지 ============= */
+
+.write-page {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.write-page h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.write-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.write-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.write-textarea {
+  width: 100%;
+  height: 250px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  resize: vertical;
+}
+
+/* 익명 / 관리자 체크 박스 */
+
+.anon-check,
+.admin-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.anon-check input[type="checkbox"],
+.admin-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+/* 등록 버튼 */
+
+.post-btn {
+  width: 100%;
+  padding: 12px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.post-btn:hover {
+  opacity: 0.9;
+}
+
+/* ============= 관리자 닉네임 무지개 ============= */
+
+.rainbow-admin {
+  font-weight: 700;
+  background: linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    violet
+  );
+  background-size: 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbowMove 4s linear infinite;
+}
+
+@keyframes rainbowMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ============= 로그인 페이지 ============= */
+
+.login-page {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.login-card {
+  background: #fff;
+  padding: 30px 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.login-desc {
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Google 로그인 큰 버튼 (아이콘 + 텍스트) */
+
+.login-big-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.login-big-btn:hover {
+  background: #f5f5f5;
+}
+
+.login-google-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* 구분선 "또는" */
+
+.login-separator {
+  position: relative;
+  margin: 12px 0 18px;
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+}
+
+.login-separator::before,
+.login-separator::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #ddd;
+}
+
+.login-separator::before {
+  left: 0;
+}
+
+.login-separator::after {
+  right: 0;
+}
+
+.login-separator span {
+  background: #fff;
+  padding: 0 6px;
+}
+
+/* 이메일 로그인 박스 */
+
+.email-login-box {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.login-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.login-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* 이메일로 가입하기 링크 */
+
+.email-signup-link {
+  margin-top: 2px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #555;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* 맨 아래 긴 이메일 로그인 버튼 */
+
+.login-email-btn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 999px;
+  border: none;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.login-email-btn:hover {
+  opacity: 0.9;
+}
+/* ===== 이메일 가입 모달 ===== */
+
+.signup-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: none;              /* 기본은 숨김 */
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.signup-card {
+  background: #fff;
+  padding: 24px 20px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 380px;
+}
+
+.signup-card h3 {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.signup-buttons {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 모달 안에서 쓰는 취소 버튼 */
+.signup-buttons .login-back-btn {
+  background: #eee;
+  color: #333;
+}
+
+/* 기존 footer 스타일 유지 */
+.footer {
+  margin-top: 40px;
+  padding: 20px 0;
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+}
+
+.footer a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* 신고/문의 추가 스타일 */
+.footer-contact {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.footer-contact a {
+  color: #333;
+  text-decoration: none;
+}
+
+.footer-contact a:hover {
+  text-decoration: underline;
+}
+
+/* 방문자 + 게시물 표시 박스 */
+.visitor-box {
+  position: absolute;
+  top: 140px;          /* 필요하면 높이 조정 */
+  left: 40px;          /* 필요하면 위치 조정 */
+  background: white;
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-size: 15px;
+  line-height: 1.2;    /* 줄 간격 줄이기 */
+  color: #333;
+  width: 230px;        /* 폭 넓혀서 한 줄에 들어가게 */
+}
+
+/* ===== 공지 박스 ===== */
+
+.notice-box {
+  margin: 20px auto 10px auto;
+  padding: 10px 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.notice-label {
+  color: #e53935;   /* 빨간 글씨 "공지" */
+  font-weight: 700;
+}
+
+#notice-title {
+  font-weight: 500;
+}
+#post-count-box {
+  margin-top: 10px;   /* 방문자 박스와 간격 줌 */
+}
