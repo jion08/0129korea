@@ -88,7 +88,7 @@ main {
 .top-actions {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   margin: 10px 0 20px;
 }
@@ -543,27 +543,23 @@ main {
   text-decoration: underline;
 }
 
-/* 방문자 + 게시물 표시 박스 */
+/* 방문자 + 게시물 표시 박스 (공지처럼 한 줄) */
 .visitor-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: white;
-  padding: 14px 18px;
+  padding: 10px 15px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  font-size: 15px;
-  line-height: 1.2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
   color: #333;
-  width: 230px;
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
-.visitor-box p {
-  margin: 4px 0;
-}
-
-.visitor-box hr {
-  margin: 8px 0;
-  border: none;
-  border-top: 1px solid #eee;
+.visitor-sep {
+  color: #bbb;
 }
 
 /* ===== 공지 박스 ===== */
