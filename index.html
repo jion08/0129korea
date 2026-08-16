@@ -19,19 +19,21 @@
 
 <main>
 
-<div id="visitor-box" class="visitor-box">
-  <!-- 방문자 -->
-  <p id="today-visit">오늘 방문: 0명</p>
-  <p id="total-visit">전체 방문: 0명</p>
+  <div class="top-actions">
+    <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
 
-  <hr />
+    <div id="visitor-box" class="visitor-box">
+      <!-- 방문자 -->
+      <p id="today-visit">오늘 방문: 0명</p>
+      <p id="total-visit">전체 방문: 0명</p>
 
-  <!-- 게시물 -->
-  <p>오늘 작성된 게시물: <span id="today-posts">0</span>개</p>
-  <p>전체 작성된 게시물: <span id="total-posts">0</span>개</p>
-</div>
-  
-  <button onclick="location.href='write.html'" class="write-btn">글쓰기</button>
+      <hr />
+
+      <!-- 게시물 -->
+      <p>오늘 작성된 게시물: <span id="today-posts">0</span>개</p>
+      <p>전체 작성된 게시물: <span id="total-posts">0</span>개</p>
+    </div>
+  </div>
 
   <!-- 공지 박스 -->
   <div id="notice-box" class="notice-box" style="display:none;">
